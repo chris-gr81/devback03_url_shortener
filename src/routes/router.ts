@@ -1,8 +1,8 @@
 import { Router } from "express";
-import shortenRouter from "../shorten/shorten.controller";
+import urlRouter from "../url/url.controller";
 
 const router = Router();
 
-router.use("/shorten", shortenRouter);
+router.use("/url", urlRouter);
 
 export default router;

@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const shorten_controller_1 = __importDefault(require("../shorten/shorten.controller"));
+const url_controller_1 = __importDefault(require("../url/url.controller"));
 const router = (0, express_1.Router)();
-router.use("/shorten", shorten_controller_1.default);
+router.use("/url", url_controller_1.default);
 exports.default = router;
 //# sourceMappingURL=router.js.map
