@@ -1,12 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createShortUrl = createShortUrl;
-function createShortUrl() {
-    const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let shortUrl = "";
-    for (let i = 0; i < 6; i++) {
-        shortUrl += charset[Math.floor(Math.random() * charset.length)];
-    }
+const db_1 = require("../db/db");
+const random_utils_1 = require("../util/random.utils");
+function createShortUrl(longUrl = "bla") {
+    const shortUrl = (0, random_utils_1.createRandomNumbers)(6);
+    (0, db_1.saveNewToMap)(shortUrl, longUrl);
     return shortUrl;
 }
 //# sourceMappingURL=url.service.js.map

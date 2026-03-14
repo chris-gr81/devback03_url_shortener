@@ -1,11 +1,8 @@
-export function createShortUrl(): string {
-  const charset =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+import { saveNewToMap } from "../db/db";
+import { createRandomNumbers } from "../util/random.utils";
 
-  let shortUrl = "";
-
-  for (let i = 0; i < 6; i++) {
-    shortUrl += charset[Math.floor(Math.random() * charset.length)];
-  }
+export function createShortUrl(longUrl: string = "bla"): string {
+  const shortUrl = createRandomNumbers(6);
+  saveNewToMap(shortUrl, longUrl);
   return shortUrl;
 }
