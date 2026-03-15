@@ -12,3 +12,22 @@ export function jsonToMap(data: string): Map<string, UrlEntry> {
 
   return converted;
 }
+
+export function isValidUrl(parsedUrl: string): boolean {
+  try {
+    new URL(parsedUrl);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function isValidShortId(shortId: unknown): shortId is string {
+  return typeof shortId === "string" && shortId.trim() !== "";
+}
+
+export function isValidLongUrl(longUrl: unknown): longUrl is string {
+  return (
+    typeof longUrl === "string" && longUrl.trim() !== "" && isValidUrl(longUrl)
+  );
+}

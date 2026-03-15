@@ -1,24 +1,29 @@
 import {
   deleteSingleEntry,
   getLongByShort,
+  hasShortId,
   overrideSingleShort,
   saveNewToMap,
 } from "../db/db";
 import { createRandomNumbers } from "../util/random.utils";
 
-export function createShortUrl(longUrl: string = "bla"): string {
-  const shortUrl = createRandomNumbers(6);
-  saveNewToMap(shortUrl, longUrl);
+export function createShortId(longUrl: string): string {
+  let shortId: string;
+  do {
+    shortId = createRandomNumbers(6);
+  } while (hasShortId(shortId));
 
-  return shortUrl;
+  saveNewToMap(shortId, longUrl);
+
+  return shortId;
 }
 
-export function getLongUrl(shortUrl: string): string {
-  return getLongByShort(shortUrl);
+export function getLongUrl(shortId: string): string {
+  return getLongByShort(shortId);
 }
 
-export function deleteByShort(shortId: string): boolean {
-  return deleteSingleEntry(shortId);
+export function deleteByShort(shortId: string): void {
+  deleteSingleEntry(shortId);
 }
 
 export function updateByShort(shortId: string, newLong: string): void {

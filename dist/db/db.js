@@ -7,6 +7,7 @@ exports.deleteSingleEntry = deleteSingleEntry;
 exports.getUrlMap = getUrlMap;
 exports.overrideMap = overrideMap;
 exports.overrideSingleShort = overrideSingleShort;
+exports.hasShortId = hasShortId;
 const file_util_1 = require("../util/file.util");
 let urlMap = new Map();
 function saveNewToMap(shortUrl, longUrl) {
@@ -18,20 +19,20 @@ function loadUrlMap() {
     (0, file_util_1.readFromFile)();
     console.log("UrlMap loaded successfully");
 }
-function getLongByShort(shortUrl) {
-    const item = urlMap.get(shortUrl);
-    if (!item) {
-        throw new Error(`URL not found for shortID ${shortUrl}`);
+function getLongByShort(shortId) {
+    const entry = urlMap.get(shortId);
+    if (!entry) {
+        throw new Error(`URL not found for shortID ${shortId}`);
     }
-    return item.longUrl;
+    return entry.longUrl;
 }
 function deleteSingleEntry(shortId) {
-    const deleted = urlMap.delete(shortId);
-    if (deleted) {
-        (0, file_util_1.saveToFile)();
-        console.log(`deleted item with shortId ${shortId}`);
+    const wasDeleted = urlMap.delete(shortId);
+    if (!wasDeleted) {
+        throw new Error(`Short URL not found for ${shortId}`);
     }
-    return deleted;
+    (0, file_util_1.saveToFile)();
+    console.log(`deleted item with shortId ${shortId}`);
 }
 function getUrlMap() {
     return urlMap;
@@ -40,11 +41,12 @@ function overrideMap(newMap) {
     urlMap = newMap;
 }
 function overrideSingleShort(shortId, newLong) {
-    if (urlMap.has(shortId)) {
-        saveNewToMap(shortId, newLong);
+    if (!urlMap.has(shortId)) {
+        throw new Error(`Short URL not found for ${shortId}`);
     }
-    else {
-        console.log(`No entry with id ${shortId} found`);
-    }
+    saveNewToMap(shortId, newLong);
+}
+function hasShortId(shortId) {
+    return urlMap.has(shortId);
 }
 //# sourceMappingURL=db.js.map

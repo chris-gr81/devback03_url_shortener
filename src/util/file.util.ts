@@ -9,21 +9,21 @@ export function saveToFile(): void {
   const obj = Object.fromEntries(getUrlMap());
   const json = JSON.stringify(obj, null, 2);
 
-  fs.writeFile(filePath, json, (err) => {
-    if (err) {
-      console.log(`Error while writing to db: ${err}`);
-      return;
-    }
-    console.log("DB saved");
-  });
+  try {
+    fs.writeFileSync(filePath, json);
+    console.log("Saved to DB");
+  } catch (err) {
+    throw new Error("Failed to save database file");
+  }
 }
 
 export function readFromFile(): void {
   try {
     const data = fs.readFileSync(filePath, "utf8");
     overrideMap(jsonToMap(data));
-  } catch (error) {
-    console.log(error);
+    console.log("DB loaded");
+  } catch {
+    console.warn("No DB file found, starting with empty DB");
     return;
   }
 }

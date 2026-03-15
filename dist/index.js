@@ -14,6 +14,7 @@ const port = process.env.PORT || 3000;
 app.use(express_1.default.json());
 // Routes
 app.use("/", router_1.default);
+// start server
 app.listen(port, (error) => {
     if (error) {
         console.log(error);

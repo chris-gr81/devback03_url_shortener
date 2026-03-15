@@ -1,52 +1,81 @@
 import { Router, Request, Response } from "express";
 import {
-  createShortUrl,
+  createShortId,
   deleteByShort,
   getLongUrl,
   updateByShort,
 } from "./url.service";
+import { isValidLongUrl, isValidShortId } from "../util/transform.utils";
 
 const urlRouter = Router();
 
 urlRouter.post("/shorten", (req: Request, res: Response) => {
-  res.status(201).json({ shortUrl: createShortUrl(req.body.longUrl) });
+  try {
+    const { longUrl } = req.body;
+
+    if (!isValidLongUrl(longUrl)) {
+      return res.status(400).json({ error: "Please provide a valid URL" });
+    }
+
+    const shortId = createShortId(longUrl);
+
+    return res.status(201).json({ shortId });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Failed to create short ID" });
+  }
 });
 
-urlRouter.get("/:shortUrl", (req: Request, res: Response) => {
-  const shortId = req.params.shortUrl as string;
-  if (!shortId) {
-    throw new Error("Please provide a short id");
-  }
-  const longUrl = getLongUrl(shortId);
+urlRouter.get("/:shortId", (req: Request, res: Response) => {
+  try {
+    const { shortId } = req.params;
 
-  res.redirect(302, longUrl);
-});
+    if (!isValidShortId(shortId)) {
+      return res.status(400).json({ error: "Please provide a valid ID" });
+    }
 
-urlRouter.delete("/:shortUrl", (req: Request, res: Response) => {
-  const shortId = req.params.shortUrl;
-  console.log(shortId);
-  if (!shortId || typeof shortId !== "string") {
-    return res.status(400).json({ error: "Please provide a valid short id" });
-  }
-  const deleted = deleteByShort(shortId);
+    const longUrl = getLongUrl(shortId);
 
-  if (!deleted) {
+    return res.redirect(302, longUrl);
+  } catch (err) {
+    console.error(err);
     return res.status(404).json({ error: "Short URL not found" });
   }
-  console.log(`Deleted ${shortId}`);
-  return res.status(204).send();
 });
 
-urlRouter.put("/:shortUrl", (req: Request, res: Response) => {
-  const newLong = req.body.longUrl;
-  const shortId = req.params.shortUrl;
+urlRouter.delete("/:shortId", (req: Request, res: Response) => {
+  try {
+    const { shortId } = req.params;
+    if (!isValidShortId(shortId)) {
+      return res.status(400).json({ error: "Please provide a valid ID" });
+    }
 
-  if (!shortId || typeof shortId !== "string") {
-    return res.status(404).json({ error: "Please provide a valid short id" });
+    deleteByShort(shortId);
+
+    return res.sendStatus(204);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
   }
+});
 
-  updateByShort(shortId, newLong);
-  res.status(200).send(`${shortId} successfully updated`);
+urlRouter.put("/:shortId", (req: Request, res: Response) => {
+  try {
+    const { longUrl } = req.body;
+    const { shortId } = req.params;
+
+    if (!isValidShortId(shortId)) {
+      return res.status(400).json({ error: "Please provide a valid ID" });
+    }
+    if (!isValidLongUrl(longUrl)) {
+      return res.status(400).json({ error: "Please provide a valid URL" });
+    }
+    updateByShort(shortId, longUrl);
+    return res.status(200).send(`${shortId} successfully updated`);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 export default urlRouter;

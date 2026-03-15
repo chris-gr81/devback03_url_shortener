@@ -14,6 +14,7 @@ app.use(express.json());
 // Routes
 app.use("/", router);
 
+// start server
 app.listen(port, (error) => {
   if (error) {
     console.log(error);

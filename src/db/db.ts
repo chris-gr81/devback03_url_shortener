@@ -14,22 +14,22 @@ export function loadUrlMap(): void {
   console.log("UrlMap loaded successfully");
 }
 
-export function getLongByShort(shortUrl: string): string {
-  const item = urlMap.get(shortUrl);
+export function getLongByShort(shortId: string): string {
+  const entry = urlMap.get(shortId);
 
-  if (!item) {
-    throw new Error(`URL not found for shortID ${shortUrl}`);
+  if (!entry) {
+    throw new Error(`URL not found for shortID ${shortId}`);
   }
-  return item.longUrl;
+  return entry.longUrl;
 }
 
-export function deleteSingleEntry(shortId: string): boolean {
-  const deleted = urlMap.delete(shortId);
-  if (deleted) {
-    saveToFile();
-    console.log(`deleted item with shortId ${shortId}`);
+export function deleteSingleEntry(shortId: string): void {
+  const wasDeleted = urlMap.delete(shortId);
+  if (!wasDeleted) {
+    throw new Error(`Short URL not found for ${shortId}`);
   }
-  return deleted;
+  saveToFile();
+  console.log(`deleted item with shortId ${shortId}`);
 }
 
 export function getUrlMap() {
@@ -41,9 +41,12 @@ export function overrideMap(newMap: Map<string, UrlEntry>): void {
 }
 
 export function overrideSingleShort(shortId: string, newLong: string): void {
-  if (urlMap.has(shortId)) {
-    saveNewToMap(shortId, newLong);
-  } else {
-    console.log(`No entry with id ${shortId} found`);
+  if (!urlMap.has(shortId)) {
+    throw new Error(`Short URL not found for ${shortId}`);
   }
+  saveNewToMap(shortId, newLong);
+}
+
+export function hasShortId(shortId: string): boolean {
+  return urlMap.has(shortId);
 }

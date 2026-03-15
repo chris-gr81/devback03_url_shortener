@@ -13,21 +13,22 @@ const filePath = path_1.default.join(__dirname, "/../db/", "urlmap.json");
 function saveToFile() {
     const obj = Object.fromEntries((0, db_1.getUrlMap)());
     const json = JSON.stringify(obj, null, 2);
-    fs_1.default.writeFile(filePath, json, (err) => {
-        if (err) {
-            console.log(`Error while writing to db: ${err}`);
-            return;
-        }
-        console.log("DB saved");
-    });
+    try {
+        fs_1.default.writeFileSync(filePath, json);
+        console.log("Saved to DB");
+    }
+    catch (err) {
+        throw new Error("Failed to save database file");
+    }
 }
 function readFromFile() {
     try {
         const data = fs_1.default.readFileSync(filePath, "utf8");
         (0, db_1.overrideMap)((0, transform_utils_1.jsonToMap)(data));
+        console.log("DB loaded");
     }
-    catch (error) {
-        console.log(error);
+    catch {
+        console.warn("No DB file found, starting with empty DB");
         return;
     }
 }
