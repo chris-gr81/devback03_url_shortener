@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { getUrlMap, overrideMap } from "../db/db";
 import { jsonToMap } from "./transform.utils";
+import { AppError } from "../error/AppError";
 
 const filePath = path.join(__dirname, "/../db/", "urlmap.json");
 
@@ -13,7 +14,7 @@ export function saveToFile(): void {
     fs.writeFileSync(filePath, json);
     console.log("Saved to DB");
   } catch (err) {
-    throw new Error("Failed to save database file");
+    throw new AppError(500, "Failed to save database file");
   }
 }
 

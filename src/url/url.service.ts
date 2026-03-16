@@ -5,12 +5,13 @@ import {
   overrideSingleShort,
   saveNewToMap,
 } from "../db/db";
+import { SHORT_ID_LENGTH } from "../util/constants";
 import { createRandomNumbers } from "../util/random.utils";
 
 export function createShortId(longUrl: string): string {
   let shortId: string;
   do {
-    shortId = createRandomNumbers(6);
+    shortId = createRandomNumbers(SHORT_ID_LENGTH);
   } while (hasShortId(shortId));
 
   saveNewToMap(shortId, longUrl);
