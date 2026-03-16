@@ -85,7 +85,10 @@ urlRouter.put(
       validateLongUrl(longUrl);
 
       updateByShort(shortId, longUrl);
-      return res.status(200).send(`${shortId} successfully updated`);
+      return res
+        .status(200)
+        .header({ "Content-Location": "http://localhost:3000/url/" + shortId })
+        .send(`${shortId} successfully updated`);
     } catch (err: unknown) {
       console.error(err);
       if (err instanceof AppError) {
