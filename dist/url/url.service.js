@@ -5,11 +5,12 @@ exports.getLongUrl = getLongUrl;
 exports.deleteByShort = deleteByShort;
 exports.updateByShort = updateByShort;
 const db_1 = require("../db/db");
+const constants_1 = require("../util/constants");
 const random_utils_1 = require("../util/random.utils");
 function createShortId(longUrl) {
     let shortId;
     do {
-        shortId = (0, random_utils_1.createRandomNumbers)(6);
+        shortId = (0, random_utils_1.createRandomNumbers)(constants_1.SHORT_ID_LENGTH);
     } while ((0, db_1.hasShortId)(shortId));
     (0, db_1.saveNewToMap)(shortId, longUrl);
     return shortId;

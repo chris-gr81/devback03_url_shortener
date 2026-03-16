@@ -9,6 +9,7 @@ const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
 const db_1 = require("../db/db");
 const transform_utils_1 = require("./transform.utils");
+const AppError_1 = require("../error/AppError");
 const filePath = path_1.default.join(__dirname, "/../db/", "urlmap.json");
 function saveToFile() {
     const obj = Object.fromEntries((0, db_1.getUrlMap)());
@@ -18,7 +19,7 @@ function saveToFile() {
         console.log("Saved to DB");
     }
     catch (err) {
-        throw new Error("Failed to save database file");
+        throw new AppError_1.AppError(500, "Failed to save database file");
     }
 }
 function readFromFile() {

@@ -9,6 +9,7 @@ exports.overrideMap = overrideMap;
 exports.overrideSingleShort = overrideSingleShort;
 exports.hasShortId = hasShortId;
 const file_util_1 = require("../util/file.util");
+const NotFoundError_1 = require("../error/NotFoundError");
 let urlMap = new Map();
 function saveNewToMap(shortUrl, longUrl) {
     urlMap.set(shortUrl, { longUrl: longUrl, createdAt: new Date() });
@@ -22,14 +23,14 @@ function loadUrlMap() {
 function getLongByShort(shortId) {
     const entry = urlMap.get(shortId);
     if (!entry) {
-        throw new Error(`URL not found for shortID ${shortId}`);
+        throw new NotFoundError_1.NotFoundError(404, `URL not found for shortID ${shortId}`);
     }
     return entry.longUrl;
 }
 function deleteSingleEntry(shortId) {
     const wasDeleted = urlMap.delete(shortId);
     if (!wasDeleted) {
-        throw new Error(`Short URL not found for ${shortId}`);
+        throw new NotFoundError_1.NotFoundError(404, `URL not found for shortID ${shortId}`);
     }
     (0, file_util_1.saveToFile)();
     console.log(`deleted item with shortId ${shortId}`);
@@ -42,7 +43,7 @@ function overrideMap(newMap) {
 }
 function overrideSingleShort(shortId, newLong) {
     if (!urlMap.has(shortId)) {
-        throw new Error(`Short URL not found for ${shortId}`);
+        throw new NotFoundError_1.NotFoundError(404, `Short URL not found for ${shortId}`);
     }
     saveNewToMap(shortId, newLong);
 }
