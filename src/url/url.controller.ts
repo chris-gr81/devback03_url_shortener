@@ -21,7 +21,10 @@ urlRouter.post(
 
       const shortId = createShortId(longUrl);
 
-      return res.status(201).json({ shortId });
+      return res
+        .status(201)
+        .header({ "Content-Location": "http://localhost:3000/url/" + shortId })
+        .json({ shortId });
     } catch (err: unknown) {
       console.log(err);
       if (err instanceof AppError) {
@@ -61,7 +64,7 @@ urlRouter.delete(
       deleteByShort(shortId);
 
       return res.sendStatus(204);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       if (err instanceof AppError) {
         return res.status(err.status).json({ error: err.message });
@@ -83,7 +86,7 @@ urlRouter.put(
 
       updateByShort(shortId, longUrl);
       return res.status(200).send(`${shortId} successfully updated`);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       if (err instanceof AppError) {
         return res.status(err.status).json({ error: err.message });
