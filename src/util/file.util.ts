@@ -1,7 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { overrideMap } from "../db/db";
-import { jsonToMap } from "./transform.utils";
 import { AppError } from "../error/AppError";
 
 const filePath = path.join(__dirname, "/../db/", "urlmap.json");
