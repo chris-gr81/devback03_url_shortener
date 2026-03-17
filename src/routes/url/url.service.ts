@@ -4,9 +4,9 @@ import {
   hasShortId,
   overrideSingleShort,
   saveNewToMap,
-} from "../db/db";
-import { SHORT_ID_LENGTH } from "../util/constants";
-import { createRandomNumbers } from "../util/random.utils";
+} from "../../db/db";
+import { SHORT_ID_LENGTH } from "../../util/constants";
+import { createRandomNumbers } from "../../util/random.utils";
 
 export function createShortId(longUrl: string): string {
   let shortId: string;

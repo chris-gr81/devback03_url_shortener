@@ -1,17 +1,21 @@
 import { UrlEntry } from "./db.types";
 import { readFromFile, saveToFile } from "../util/file.util";
 import { NotFoundError } from "../error/NotFoundError";
+import { jsonToMap, mapToJson } from "../util/transform.utils";
 
 let urlMap = new Map<string, UrlEntry>();
 
 export function saveNewToMap(shortUrl: string, longUrl: string) {
   urlMap.set(shortUrl, { longUrl: longUrl, createdAt: new Date() });
-  saveToFile();
+  const converted = mapToJson(urlMap);
+  saveToFile(converted);
 }
 
 export function loadUrlMap(): void {
   console.log("Loading UrlMAp");
-  readFromFile();
+  const loadedFile = readFromFile();
+  const loadedMap = jsonToMap(loadedFile);
+  overrideMap(loadedMap);
   console.log("UrlMap loaded successfully");
 }
 
@@ -29,7 +33,8 @@ export function deleteSingleEntry(shortId: string): void {
   if (!wasDeleted) {
     throw new NotFoundError(404, `URL not found for shortID ${shortId}`);
   }
-  saveToFile();
+  const converted = mapToJson(urlMap);
+  saveToFile(converted);
   console.log(`deleted item with shortId ${shortId}`);
 }
 
@@ -50,4 +55,8 @@ export function overrideSingleShort(shortId: string, newLong: string): void {
 
 export function hasShortId(shortId: string): boolean {
   return urlMap.has(shortId);
+}
+
+export function loadMap() {
+  urlMap = jsonToMap(readFromFile());
 }

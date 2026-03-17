@@ -7,8 +7,8 @@ import {
 } from "./url.service";
 
 import { CreateUrlDto } from "./url.interface";
-import { validateLongUrl, validateShortId } from "../util/validate.utils";
-import { AppError } from "../error/AppError";
+import { validateLongUrl, validateShortId } from "../../util/validate.utils";
+import { AppError } from "../../error/AppError";
 
 const urlRouter = Router();
 

@@ -12,3 +12,9 @@ export function jsonToMap(data: string): Map<string, UrlEntry> {
 
   return converted;
 }
+
+export function mapToJson(currentMap: Map<string, UrlEntry>): string {
+  const obj = Object.fromEntries(currentMap);
+  const converted = JSON.stringify(obj, null, 2);
+  return converted;
+}
