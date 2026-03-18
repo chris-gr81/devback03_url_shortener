@@ -10,8 +10,26 @@ import { CreateUrlDto } from "./url.interface";
 import { validateLongUrl, validateShortId } from "../../util/validate.utils";
 import { AppError } from "../../error/AppError";
 
+/**
+ * Router for all URL shortener endpoints.
+ *
+ * Provides routes to:
+ * - create a short URL
+ * - resolve a short URL
+ * - delete a short URL
+ * - update a short URL
+ */
 const urlRouter = Router();
 
+/**
+ * Creates a new short URL mapping.
+ *
+ * Route: POST /shorten
+ *
+ * Expects a request body containing a valid long URL.
+ * Returns the generated short ID and a Content-Location header
+ * pointing to the created resource.
+ */
 urlRouter.post(
   "/shorten",
   (req: Request<{}, {}, CreateUrlDto>, res: Response) => {
@@ -35,6 +53,14 @@ urlRouter.post(
   },
 );
 
+/**
+ * Resolves a short ID to its original long URL.
+ *
+ * Route: GET /:shortId
+ *
+ * Validates the short ID and redirects the client
+ * to the matching long URL.
+ */
 urlRouter.get(
   "/:shortId",
   (req: Request<{ shortId: string }>, res: Response) => {
@@ -54,6 +80,14 @@ urlRouter.get(
   },
 );
 
+/**
+ * Deletes an existing short URL mapping.
+ *
+ * Route: DELETE /:shortId
+ *
+ * Validates the short ID and removes the corresponding entry.
+ * Returns HTTP 204 on success.
+ */
 urlRouter.delete(
   "/:shortId",
   (req: Request<{ shortId: string }>, res: Response) => {
@@ -74,6 +108,15 @@ urlRouter.delete(
   },
 );
 
+/**
+ * Updates the long URL of an existing short ID.
+ *
+ * Route: PUT /:shortId
+ *
+ * Expects a valid short ID as route parameter and
+ * a valid long URL in the request body.
+ * Returns a success message and updates the Content-Location header.
+ */
 urlRouter.put(
   "/:shortId",
   (req: Request<{ shortId: string }, {}, CreateUrlDto>, res: Response) => {

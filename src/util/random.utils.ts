@@ -1,3 +1,16 @@
+/**
+ * Generates a random alphanumeric string of a given length.
+ *
+ * The function creates a string consisting of:
+ * - digits (0–9)
+ * - uppercase letters (A–Z)
+ * - lowercase letters (a–z)
+ *
+ * It uses ASCII character codes to randomly generate valid characters.
+ *
+ * @param range - The desired length of the generated string.
+ * @returns A random alphanumeric string with the specified length.
+ */
 export function createRandomNumbers(range: number): string {
   let result = "";
   while (result.length < range) {
