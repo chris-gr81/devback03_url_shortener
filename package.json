@@ -16,10 +16,12 @@
   "main": "index.ts",
   "scripts": {
     "start": "npx tsc && npx tsx src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docs": "typedoc"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "typedoc": "^0.28.17",
     "typescript": "^5.9.3"
   },
   "dependencies": {
